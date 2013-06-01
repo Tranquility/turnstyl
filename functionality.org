@@ -1,0 +1,13 @@
+* Functionality
+  - all github users are automatically sshatar users
+** Client gem
+  - registered users can be included in client config with only the email address
+  - users can also be added to client config with github username
+
+** Rails app
+  - user can also register with email
+  - user "profile" shows the user an overview of his/her public keys
+  - Access functionality
+    - server can be grouped
+    - user can be added to projects
+    - any number of users/projects can be assigned to a specific server/group in the rails app

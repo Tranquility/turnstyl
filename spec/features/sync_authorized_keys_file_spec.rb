@@ -29,4 +29,6 @@ describe 'Sync authorized_keys file' do
 
     File.read(file).should eq "# YOU HAVE NOT AUTHORIZED ANYONE TO LOGIN\n"
   end
+
+
 end
