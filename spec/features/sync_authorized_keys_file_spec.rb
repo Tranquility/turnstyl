@@ -30,5 +30,11 @@ describe 'Sync authorized_keys file' do
     File.read(file).should eq "# YOU HAVE NOT AUTHORIZED ANYONE TO LOGIN\n"
   end
 
+  it 'starts downloading the keys if there are user in the config file' do
+    Communicator.any_instance.stub(:get_keys_from).and_return(['12345', '67890'])
+    Communicator.new.sync ['flooose']
+    File.read(file).should eq "12345\n67890\n"
+  end
+
 
 end
