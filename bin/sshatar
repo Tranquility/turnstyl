@@ -1,0 +1,11 @@
+#! /usr/bin/env ruby
+
+require_relative '../lib/sshatar_client'
+require 'toml'
+
+path = File.expand_path("~/.sshatar_config")
+hash = TOML.load_file(path)
+
+
+
+SshatarClient.new.update_authorized_keys hash["userlist"]

@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    citrus (2.4.1)
     diff-lcs (1.2.4)
     json (1.8.0)
     mime-types (1.23)
@@ -14,6 +15,8 @@ GEM
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.13.1)
+    toml-rb (0.1.3)
+      citrus
 
 PLATFORMS
   ruby
@@ -22,3 +25,4 @@ DEPENDENCIES
   json
   rest-client
   rspec
+  toml-rb

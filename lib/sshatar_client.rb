@@ -1,3 +1,5 @@
+require_relative 'communicator'
+
 class SshatarClient
   def update_authorized_keys people=[]
     keys = []
