@@ -1,5 +1,4 @@
 require 'spec_helper'
-require_relative '../../lib/communicator'
 require_relative '../../lib/sshatar_client'
 
 describe 'Sync authorized_keys file' do
