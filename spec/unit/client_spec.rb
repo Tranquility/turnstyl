@@ -1,7 +1,7 @@
 require 'spec_helper'
-require_relative '../../lib/sshatar_client'
+require_relative '../../lib/sshatar/client'
 
-describe 'Sync authorized_keys file' do
+describe Sshatar::Client do
   let(:dummy_home) { base_path+'/spec/dummy_home_folder/' }
   let(:file) { dummy_home+'/.ssh/authorized_keys' }
   let(:sshatar_client) {SshatarClient.new}

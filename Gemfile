@@ -1,6 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'rest-client'
-gem 'json'
-gem 'toml-rb'
-gem 'rspec'
+# Specify your gem's dependencies in sshatar-client.gemspec
+gemspec
