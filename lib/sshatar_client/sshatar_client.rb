@@ -1,4 +1,8 @@
 class SshatarClient
+  def self.home_folder
+    "~/"
+  end
+
   def update_authorized_keys people=[]
     keys = []
     if people.empty?
@@ -8,7 +12,9 @@ class SshatarClient
         keys = keys + Communicator.new.get_keys_from(person)
       end
     end
-    system("echo '#{keys.join("\n")}' > #{File.expand_path('../../../testfile', __FILE__)}")
+    File.open(SshatarClient.home_folder+'.ssh/authorized_keys', 'w+') do |file|
+      file.write(keys.join("\n") << "\n")
+    end
   end
 end
 

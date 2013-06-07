@@ -2,11 +2,17 @@ require 'spec_helper'
 require_relative '../../lib/sshatar_client'
 
 describe 'Sync authorized_keys file' do
-  let(:file) { File.expand_path('../../../testfile', __FILE__) }
+  let(:dummy_home) { base_path+'/spec/dummy_home_folder/' }
+  let(:file) { dummy_home+'/.ssh/authorized_keys' }
   let(:sshatar_client) {SshatarClient.new}
 
+  before do
+    FileUtils.mkdir_p base_path+"/spec/dummy_home_folder/.ssh"
+    SshatarClient.stub(:home_folder).and_return(dummy_home)
+  end
+
   after do
-    system("rm #{File.expand_path('../../../testfile', __FILE__)}")
+    FileUtils.rm_rf dummy_home
   end
 
   it 'creates authorized_keys file' do
@@ -21,6 +27,7 @@ describe 'Sync authorized_keys file' do
     sshatar_client.update_authorized_keys
     last_time = File.mtime(file)
 
+    sleep 0.0002
     sshatar_client.update_authorized_keys
     File.mtime(file).should_not eq last_time
   end
