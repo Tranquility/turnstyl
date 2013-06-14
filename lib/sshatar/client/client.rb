@@ -1,6 +1,7 @@
 require 'toml'
 
 module Sshatar
+  class ConfigMissing < Exception; end
   class Client
     def self.home_folder
       File.expand_path("~/")
@@ -8,6 +9,9 @@ module Sshatar
 
     def initialize
       @config_path = File.expand_path(Client.home_folder+"/.sshatar_config")
+      if config_file_missing?
+        raise ConfigMissing, "Unable to run without a config file. RTFM"
+      end
     end
 
     def run
@@ -37,6 +41,10 @@ module Sshatar
 
     def authorized_key_missing?
       !File.exist? Client.home_folder+"/.ssh/authorized_keys"
+    end
+
+    def config_file_missing?
+      !File.exist? Client.home_folder+"/.sshatar_config"
     end
 
     def config_changed?

@@ -9,6 +9,7 @@ module Sshatar
     let(:sshatar_client) {Client.new}
 
     before do
+      Client.any_instance.stub(:config_file_missing?).and_return(false)
       FileUtils.mkdir_p base_path+"/spec/dummy_home_folder/.ssh"
       Client.stub(:home_folder).and_return(dummy_home)
     end
@@ -60,6 +61,11 @@ module Sshatar
 
         sshatar_client.should_receive(:update_authorized_keys)
         sshatar_client.run
+      end
+
+      it 'raises exception if config file is missing' do
+        Client.any_instance.stub(:config_file_missing?).and_return(true)
+        expect { Client.new.run }.to raise_error(Sshatar::ConfigMissing)
       end
     end
   end
