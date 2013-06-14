@@ -2,5 +2,5 @@
 
 require_relative '../lib/sshatar/client'
 
-client.new.run
+Sshatar::Client.new.run
 

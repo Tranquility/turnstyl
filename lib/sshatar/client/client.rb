@@ -7,19 +7,15 @@ module Sshatar
     end
 
     def initialize
-      @config_path = File.expand_path(Client.home_folder+".sshatar_config")
+      @config_path = File.expand_path(Client.home_folder+"/.sshatar_config")
     end
 
-
     def run
-      if File.mtime(@config_path) > File.mtime(Client.home_folder+".ssh/authorized_keys")
+      if authorized_key_missing? || config_changed?
         update_authorized_keys
       end
     end
 
-    def load_settings
-      TOML.load_file(@config_path)
-    end
 
     def update_authorized_keys
       settings = load_settings
@@ -35,6 +31,20 @@ module Sshatar
       File.open(Client.home_folder+'/.ssh/authorized_keys', 'w+') do |file|
         file.write(keys.join("\n") << "\n")
       end
+    end
+
+    private
+
+    def authorized_key_missing?
+      !File.exist? Client.home_folder+"/.ssh/authorized_keys"
+    end
+
+    def config_changed?
+      File.mtime(@config_path) > File.mtime(Client.home_folder+"/.ssh/authorized_keys")
+    end
+
+    def load_settings
+      TOML.load_file(@config_path)
     end
   end
 end

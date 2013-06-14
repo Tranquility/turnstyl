@@ -3,9 +3,9 @@ require_relative '../../lib/sshatar/client'
 
 module Sshatar
   describe Client do
-    let(:dummy_home) { base_path+'/spec/dummy_home_folder/' }
-    let(:key_file) { dummy_home+'.ssh/authorized_keys' }
-    let(:config_file) { dummy_home+'.sshatar_config' }
+    let(:dummy_home) { base_path+'/spec/dummy_home_folder' }
+    let(:key_file) { dummy_home+'/.ssh/authorized_keys' }
+    let(:config_file) { dummy_home+'/.sshatar_config' }
     let(:sshatar_client) {Client.new}
 
     before do
@@ -41,18 +41,22 @@ module Sshatar
     end
 
     describe '#run' do
+      let(:some_time) { Time.now }
+      before do
+        sshatar_client.stub(:authorized_key_missing?).and_return(false)
+      end
+
       it 'does not overwrite authorized_keys file if configuration not changed' do
-        some_time = Time.now
-        File.stub(:mtime).and_return(some_time)
+        File.should_receive(:mtime).with(config_file).and_return(some_time)
+        File.should_receive(:mtime).with(key_file).and_return(some_time + 2)
 
         sshatar_client.should_not_receive(:update_authorized_keys)
         sshatar_client.run
       end
 
       it 'overwrites authorized_keys file if configuration changed' do
-        some_time = Time.now
-        File.should_receive(:mtime).with(key_file).and_return(some_time)
         File.should_receive(:mtime).with(config_file).and_return(some_time + 2)
+        File.should_receive(:mtime).with(key_file).and_return(some_time)
 
         sshatar_client.should_receive(:update_authorized_keys)
         sshatar_client.run
