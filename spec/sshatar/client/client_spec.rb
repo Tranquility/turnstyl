@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../../lib/sshatar/client'
+require_relative '../../../lib/sshatar/client'
 
 module Sshatar
   describe Client do
