@@ -1,6 +1,17 @@
 #! /usr/bin/env ruby
 
 require_relative '../lib/sshatar/client'
+require 'optparse'
+
+options = {}
+option_parser = OptionParser.new do |opts|
+  opts.on("-f","--force", "Overwrite existing authorized_keys file") do
+    options[:force] = true
+  end
+end
+option_parser.parse!
+
+puts "force option is #{options[:force]}"
 
 Sshatar::Client.new.run
 
