@@ -1,4 +1,5 @@
 require 'toml'
+require 'io/console'
 
 module Sshatar
   class ConfigMissing < Exception; end
@@ -16,10 +17,22 @@ module Sshatar
 
     def run
       if authorized_key_missing? || config_changed?
-        update_authorized_keys
+        puts "Authorized keys file exists. Overwrite? [y/N/b/?]"
+        input = STDIN.getch
+        case input
+        when "y"
+          update_authorized_keys
+        when "b"
+          create_backup
+          update_authorized_keys
+        when "?"
+          display_help
+          run
+        else
+          puts "Doing nothing ..."
+        end
       end
     end
-
 
     def update_authorized_keys
       settings = load_settings
@@ -53,6 +66,14 @@ module Sshatar
 
     def load_settings
       TOML.load_file(@config_path)
+    end
+
+    def create_backup
+      puts "Making a backup ..."
+    end
+
+    def display_help
+      puts "I am helping you ..."
     end
   end
 end
