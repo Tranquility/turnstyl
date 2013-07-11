@@ -27,8 +27,8 @@ module Sshatar
       if authorized_key_missing?
         update_authorized_keys
       elsif config_changed?
-        puts "Authorized keys file exists. Overwrite? [y/N/b/?]"
-        input = STDIN.getch
+        print "Authorized keys file exists. Overwrite? [y/N/b/?]? "
+        input = STDIN.gets.chomp
         case input
         when "y"
           update_authorized_keys
@@ -39,7 +39,7 @@ module Sshatar
           display_help
           update_authorized_keys_carefully
         else
-          puts "Doing nothing ..."
+          puts "\nDoing nothing ..."
         end
       end
     end
@@ -58,7 +58,7 @@ module Sshatar
       File.open(Client.home_folder+'/.ssh/authorized_keys', 'w+') do |file|
         file.write(keys.join("\n") << "\n")
       end
-      puts "keys updated..."
+      puts "\nkeys updated..."
     end
 
     def authorized_key_missing?
@@ -84,11 +84,11 @@ module Sshatar
     end
 
     def display_create_backup
-      puts "Making a backup ..."
+      puts "\nMaking a backup ..."
     end
 
     def display_help
-      puts "I am helping you ..."
+      puts "\nI am helping you ..."
     end
   end
 end
