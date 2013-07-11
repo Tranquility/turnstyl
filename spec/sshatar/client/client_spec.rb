@@ -56,7 +56,7 @@ module Sshatar
         File.should_receive(:mtime).with(key_file).and_return(some_time + 2)
 
         sshatar_client.should_not_receive(:update_authorized_keys)
-        sshatar_client.run
+        sshatar_client.run nil
       end
 
       it 'overwrites authorized_keys file if configuration changed' do
@@ -65,12 +65,12 @@ module Sshatar
         File.should_receive(:mtime).with(key_file).and_return(some_time)
 
         sshatar_client.should_receive(:update_authorized_keys)
-        sshatar_client.run
+        sshatar_client.run nil
       end
 
       it 'raises exception if config file is missing' do
         Client.any_instance.stub(:config_file_missing?).and_return(true)
-        expect { Client.new.run }.to raise_error(Sshatar::ConfigMissing)
+        expect { Client.new.run nil }.to raise_error(Sshatar::ConfigMissing)
       end
 
       it 'asks the user for feedback when the authorized_keys file exists' do
@@ -79,7 +79,7 @@ module Sshatar
 
         STDIN.should_receive(:getch).and_return('y')
 
-        sshatar_client.run
+        sshatar_client.run nil
       end
 
       context 'user gives feedback' do
@@ -93,16 +93,16 @@ module Sshatar
           STDIN.stub(:getch).and_return('y')
           sshatar_client.should_receive(:update_authorized_keys)
 
-          sshatar_client.run
+          sshatar_client.run nil
         end
 
         it 'updates authorized_keys file and creates backup first if user inputs "b"' do
           STDIN.stub(:getch).and_return('b')
 
-          sshatar_client.should_receive(:create_backup)
+          sshatar_client.should_receive(:display_create_backup)
           sshatar_client.should_receive(:update_authorized_keys)
 
-          sshatar_client.run
+          sshatar_client.run nil
         end
 
         it 'displays help if user inputs "?"' do
@@ -111,7 +111,7 @@ module Sshatar
           sshatar_client.should_receive(:display_help)
           sshatar_client.should_not_receive(:update_authorized_keys)
 
-          sshatar_client.run
+          sshatar_client.run nil
         end
 
         it 'it does not update authorized_keys file if user inputs "n"' do
@@ -119,7 +119,7 @@ module Sshatar
 
           sshatar_client.should_not_receive(:update_authorized_keys)
 
-          sshatar_client.run
+          sshatar_client.run nil
         end
       end
     end

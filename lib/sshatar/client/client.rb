@@ -15,19 +15,29 @@ module Sshatar
       end
     end
 
-    def run
-      if authorized_key_missing? || config_changed?
+    def run(force)
+      if force
+        update_authorized_keys
+      else
+        update_authorized_keys_carefully
+      end
+    end
+
+    def update_authorized_keys_carefully
+      if authorized_key_missing?
+        update_authorized_keys
+      elsif config_changed?
         puts "Authorized keys file exists. Overwrite? [y/N/b/?]"
         input = STDIN.getch
         case input
         when "y"
           update_authorized_keys
         when "b"
-          create_backup
+          display_create_backup
           update_authorized_keys
         when "?"
           display_help
-          run
+          update_authorized_keys_carefully
         else
           puts "Doing nothing ..."
         end
@@ -48,9 +58,8 @@ module Sshatar
       File.open(Client.home_folder+'/.ssh/authorized_keys', 'w+') do |file|
         file.write(keys.join("\n") << "\n")
       end
+      puts "keys updated..."
     end
-
-    private
 
     def authorized_key_missing?
       !File.exist? Client.home_folder+"/.ssh/authorized_keys"
@@ -64,11 +73,17 @@ module Sshatar
       File.mtime(@config_path) > File.mtime(Client.home_folder+"/.ssh/authorized_keys")
     end
 
+    def update_necessary?
+      authorized_key_missing? || config_changed?
+    end
+
+    private
+
     def load_settings
       TOML.load_file(@config_path)
     end
 
-    def create_backup
+    def display_create_backup
       puts "Making a backup ..."
     end
 

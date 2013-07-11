@@ -13,5 +13,5 @@ option_parser.parse!
 
 # puts "force option is #{options[:force]}"
 
-Sshatar::Client.new.run
+Sshatar::Client.new.run(options[:force])
 
