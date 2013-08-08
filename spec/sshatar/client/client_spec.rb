@@ -13,6 +13,7 @@ module Sshatar
       FileUtils.mkdir_p base_path+"/spec/dummy_home_folder/.ssh"
       Client.stub(:home_folder).and_return(dummy_home)
       sshatar_client.stub(:puts)
+      sshatar_client.stub(:print)
     end
 
     after do
@@ -51,7 +52,7 @@ module Sshatar
       end
 
       it 'does not overwrite authorized_keys file if configuration not changed' do
-        STDIN.stub(:getch).and_return('y')
+        STDIN.stub(:gets).and_return('y')
         File.should_receive(:mtime).with(config_file).and_return(some_time)
         File.should_receive(:mtime).with(key_file).and_return(some_time + 2)
 
@@ -60,7 +61,7 @@ module Sshatar
       end
 
       it 'overwrites authorized_keys file if configuration changed' do
-        STDIN.stub(:getch).and_return('y')
+        STDIN.stub(:gets).and_return('y')
         File.should_receive(:mtime).with(config_file).and_return(some_time + 2)
         File.should_receive(:mtime).with(key_file).and_return(some_time)
 
@@ -77,7 +78,7 @@ module Sshatar
         sshatar_client.stub(:config_changed?).and_return(true)
         sshatar_client.stub(:update_authorized_keys)
 
-        STDIN.should_receive(:getch).and_return('y')
+        STDIN.should_receive(:gets).and_return('y')
 
         sshatar_client.run nil
       end
@@ -90,14 +91,14 @@ module Sshatar
         end
 
         it 'updates authorized_keys file if user inputs "y"' do
-          STDIN.stub(:getch).and_return('y')
+          STDIN.stub(:gets).and_return('y')
           sshatar_client.should_receive(:update_authorized_keys)
 
           sshatar_client.run nil
         end
 
         it 'updates authorized_keys file and creates backup first if user inputs "b"' do
-          STDIN.stub(:getch).and_return('b')
+          STDIN.stub(:gets).and_return('b')
 
           sshatar_client.should_receive(:display_create_backup)
           sshatar_client.should_receive(:update_authorized_keys)
@@ -106,7 +107,7 @@ module Sshatar
         end
 
         it 'displays help if user inputs "?"' do
-          STDIN.stub(:getch).and_return('?', 'n')
+          STDIN.stub(:gets).and_return('?', 'n')
 
           sshatar_client.should_receive(:display_help)
           sshatar_client.should_not_receive(:update_authorized_keys)
@@ -115,7 +116,7 @@ module Sshatar
         end
 
         it 'it does not update authorized_keys file if user inputs "n"' do
-          STDIN.stub(:getch).and_return('n')
+          STDIN.stub(:gets).and_return('n')
 
           sshatar_client.should_not_receive(:update_authorized_keys)
 
