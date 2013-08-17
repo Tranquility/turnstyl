@@ -120,7 +120,7 @@ module Sshatar
         it 'updates authorized_keys file and creates backup first if user inputs "b"' do
           STDIN.stub(:gets).and_return('b')
 
-          sshatar_client.should_receive(:display_create_backup)
+          sshatar_client.should_receive(:create_backup)
           sshatar_client.should_receive(:update_authorized_keys)
 
           sshatar_client.run nil
@@ -141,6 +141,19 @@ module Sshatar
           sshatar_client.should_not_receive(:update_authorized_keys)
 
           sshatar_client.run nil
+        end
+      end
+
+      describe '#create_backup' do
+        it 'renames the current authorized_keys file' do
+          FileUtils.touch key_file
+          FileUtils.touch key_file+".bak1"
+          File.exist?(key_file).should be_true
+
+          sshatar_client.create_backup
+
+          File.exist?(key_file).should be_false
+          File.exist?(key_file+".bak2").should be_true
         end
       end
     end

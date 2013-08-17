@@ -5,7 +5,7 @@ module Sshatar
   class ConfigMissing < Exception; end
   class Client
     def self.home_folder
-      File.expand_path("~/")
+      Dir.home
     end
 
     def initialize
@@ -33,7 +33,7 @@ module Sshatar
         when "y"
           update_authorized_keys
         when "b"
-          display_create_backup
+          create_backup
           update_authorized_keys
         when "?"
           display_help
@@ -77,14 +77,17 @@ module Sshatar
       authorized_key_missing? || config_changed?
     end
 
+    def create_backup
+      puts "\nMaking a backup ..."
+      number = Dir.glob(Client.home_folder+'/.ssh/authorized_keys*').count
+      puts number
+      FileUtils.mv(Client.home_folder+"/.ssh/authorized_keys", Client.home_folder+"/.ssh/authorized_keys.bak"+number.to_s)
+    end
+
     private
 
     def load_settings
       TOML.load_file(@config_path)
-    end
-
-    def display_create_backup
-      puts "\nMaking a backup ..."
     end
 
     def display_help
