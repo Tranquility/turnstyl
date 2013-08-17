@@ -20,6 +20,27 @@ module Sshatar
       FileUtils.rm_rf dummy_home
     end
 
+    describe '#initialize' do
+      it 'raises exception if config file is missing' do
+        Client.any_instance.stub(:config_file_missing?).and_return(true)
+        expect { Client.new.run nil }.to raise_error(Sshatar::ConfigMissing)
+      end
+    end
+
+    describe '#run' do
+      it 'does not overwrite the authorized_keys file' do
+        sshatar_client.should_receive(:update_authorized_keys_carefully)
+
+        sshatar_client.run(false)
+      end
+
+      it 'overwrites the authorized_keys file if forced' do
+        sshatar_client.should_receive(:update_authorized_keys)
+
+        sshatar_client.run(false)
+      end
+    end
+
     describe '#update_authorized_keys' do
       it 'creates authorized_keys file' do
         sshatar_client.should_receive(:load_settings).and_return("userlist" => [])
@@ -29,15 +50,14 @@ module Sshatar
         File.exist?(key_file).should be_true
       end
 
-
-      it 'adds a comment when there are no authorized keys' do
+      it 'adds a comment when there are no authorized keys file' do
         sshatar_client.should_receive(:load_settings).and_return("userlist" => [])
         sshatar_client.update_authorized_keys
 
         File.read(key_file).should eq "# YOU HAVE NOT AUTHORIZED ANYONE TO LOGIN\n"
       end
 
-      it 'starts downloading the keys if there are user in the config file' do
+      it 'obtains key and writes them into the authorized_keys file' do
         Communicator.any_instance.stub(:get_keys_from).and_return(['12345', '67890'])
         sshatar_client.should_receive(:load_settings).and_return("userlist" => ['flooose'])
         sshatar_client.update_authorized_keys
@@ -45,10 +65,17 @@ module Sshatar
       end
     end
 
-    describe '#run' do
+    describe '#update_authorized_keys_carefully' do
       let(:some_time) { Time.now }
       before do
         sshatar_client.stub(:authorized_key_missing?).and_return(false)
+      end
+
+      it 'updates the keys if the authoized keys file is missing' do
+        sshatar_client.stub(:authorized_key_missing?).and_return(true)
+        sshatar_client.should_receive(:update_authorized_keys)
+
+        sshatar_client.update_authorized_keys_carefully
       end
 
       it 'does not overwrite authorized_keys file if configuration not changed' do
@@ -69,16 +96,9 @@ module Sshatar
         sshatar_client.run nil
       end
 
-      it 'raises exception if config file is missing' do
-        Client.any_instance.stub(:config_file_missing?).and_return(true)
-        expect { Client.new.run nil }.to raise_error(Sshatar::ConfigMissing)
-      end
-
       it 'asks the user for feedback when the authorized_keys file exists' do
-        sshatar_client.stub(:config_changed?).and_return(true)
+        sshatar_client.stub(:authorized_key_missing?).and_return(true)
         sshatar_client.stub(:update_authorized_keys)
-
-        STDIN.should_receive(:gets).and_return('y')
 
         sshatar_client.run nil
       end
