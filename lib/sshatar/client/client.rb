@@ -91,7 +91,16 @@ module Sshatar
     end
 
     def display_help
-      puts "\nI am helping you ..."
+      puts <<-HERE
+
+You tried to let sshatar manage your authorized_keys file, but there is an
+existing authorized_keys file and you have to decide what you want to do with
+it.
+
+If you're sure you want to overwrite it choose "y" if you want to backup your
+existing file choose "b"
+
+HERE
     end
   end
 end
