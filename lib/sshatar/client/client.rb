@@ -2,7 +2,6 @@ require 'toml'
 require 'io/console'
 
 module Sshatar
-  class ConfigMissing < Exception; end
   class Client
     def self.home_folder
       Dir.home
@@ -11,7 +10,16 @@ module Sshatar
     def initialize
       @config_path = File.expand_path(Client.home_folder+"/.sshatar_config")
       if config_file_missing?
-        raise ConfigMissing, "Unable to run without a config file. RTFM"
+        puts <<-TEXT
+
+Unable to run without a config file.
+
+Try something like this in ~/.sshatar_config
+
+    userlist = [ "githubuser1", "githubuser2", "...", "githubuser99" ]
+
+        TEXT
+        exit 1
       end
     end
 
