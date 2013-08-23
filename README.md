@@ -1,5 +1,7 @@
 # Turnstyl::Client
 
+[![Build Status](https://travis-ci.org/Tranquility/turnstyl.png)](https://travis-ci.org/Tranquility/turnstyl)
+
 Commandline utility for managing ssh access
 
 ## Installation
