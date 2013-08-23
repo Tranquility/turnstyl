@@ -1,4 +1,4 @@
-# Turnstyl::Client
+# Turnstyl
 
 [![Build Status](https://travis-ci.org/Tranquility/turnstyl.png)](https://travis-ci.org/Tranquility/turnstyl)
 
@@ -6,7 +6,7 @@ Commandline utility for managing ssh access
 
 ## Installation
 
-    $ gem install turnstyl-client
+    $ gem install turnstyl
 
 ## Usage
 
