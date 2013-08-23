@@ -1,20 +1,20 @@
 require 'toml'
 require 'io/console'
 
-module Sshatar
+module Turnstyl
   class Client
     def self.home_folder
       Dir.home
     end
 
     def initialize
-      @config_path = File.expand_path(Client.home_folder+"/.sshatar_config")
+      @config_path = File.expand_path(Client.home_folder+"/.turnstyl_config")
       if config_file_missing?
         puts <<-TEXT
 
 Unable to run without a config file.
 
-Try something like this in ~/.sshatar_config
+Try something like this in ~/.turnstyl_config
 
     userlist = [ "githubuser1", "githubuser2", "...", "githubuser99" ]
 
@@ -74,7 +74,7 @@ Try something like this in ~/.sshatar_config
     end
 
     def config_file_missing?
-      !File.exist? Client.home_folder+"/.sshatar_config"
+      !File.exist? Client.home_folder+"/.turnstyl_config"
     end
 
     def config_changed?
@@ -101,7 +101,7 @@ Try something like this in ~/.sshatar_config
     def display_help
       puts <<-HERE
 
-You tried to let sshatar manage your authorized_keys file, but there is an
+You tried to let turnstyl manage your authorized_keys file, but there is an
 existing authorized_keys file and you have to decide what you want to do with
 it.
 

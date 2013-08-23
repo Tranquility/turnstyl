@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 
-require_relative '../lib/sshatar/client'
+require_relative '../lib/turnstyl/client'
 require 'optparse'
 
 options = {}
@@ -13,5 +13,5 @@ option_parser.parse!
 
 # puts "force option is #{options[:force]}"
 
-Sshatar::Client.new.run(options[:force])
+Turnstyl::Client.new.run(options[:force])
 

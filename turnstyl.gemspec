@@ -3,13 +3,13 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name          = "sshatar-client"
+  spec.name          = "turnstyl-client"
   spec.version       = "0.1.0"
   spec.authors       = ["Ole Reifschneider", "Chris Floess"]
   spec.email         = ["mail@ole-reifschneider.de", "skeptikos@gmail.com"]
   spec.description   = %q{Commandline utility for managing ssh access}
   spec.summary       = %q{Commandline utility for managing ssh access}
-  spec.homepage      = "https://github.com/Tranquility/sshatar-client"
+  spec.homepage      = "https://github.com/Tranquility/turnstyl-client"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
