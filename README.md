@@ -10,8 +10,9 @@ Commandline utility for managing ssh access
 
 ## Usage
 
-Turnstyl-client expects a config file in your home folder named ".turnstyl-config"
-in which you list the github users that are allowed to access your system.
+The turnstyl command expects a config file in your home folder named
+".turnstyl-config" in which you list the github users that are allowed
+to access your system.
 
 
     userlist = [ "githubuser1", "githubuser2", "...", "githubuser99" ]
