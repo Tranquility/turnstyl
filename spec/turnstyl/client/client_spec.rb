@@ -5,7 +5,7 @@ module Turnstyl
   describe Client do
     let(:dummy_home) { base_path+'/spec/dummy_home_folder' }
     let(:key_file) { dummy_home+'/.ssh/authorized_keys' }
-    let(:config_file) { dummy_home+'/.turnstyl_config' }
+    let(:config_file) { dummy_home+'/.turnstylrc' }
     let(:turnstyl_client) {Client.new}
 
     before do

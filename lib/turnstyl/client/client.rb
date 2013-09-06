@@ -8,13 +8,13 @@ module Turnstyl
     end
 
     def initialize
-      @config_path = File.expand_path(Client.home_folder+"/.turnstyl_config")
+      @config_path = File.expand_path(Client.home_folder+"/.turnstylrc")
       if config_file_missing?
         puts <<-TEXT
 
 Unable to run without a config file.
 
-Try something like this in ~/.turnstyl_config
+Try something like this in ~/.turnstylrc
 
     userlist = [ "githubuser1", "githubuser2", "...", "githubuser99" ]
 
@@ -74,7 +74,7 @@ Try something like this in ~/.turnstyl_config
     end
 
     def config_file_missing?
-      !File.exist? Client.home_folder+"/.turnstyl_config"
+      !File.exist? Client.home_folder+"/.turnstylrc"
     end
 
     def config_changed?
