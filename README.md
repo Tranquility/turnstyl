@@ -11,7 +11,7 @@ Commandline utility for managing ssh access. At the moment turnstyl uses the git
 ## Usage
 
 The turnstyl command expects a config file in your home folder named
-".turnstyl-config" in which you list the github users that are allowed
+".turnstylrc" in which you list the github users that are allowed
 to access your system.
 
     userlist = [ "githubuser1", "githubuser2", "...", "githubuser99" ]
@@ -19,5 +19,5 @@ to access your system.
 
 ## Future
 
-- multiple host support
-- support for non-github services
+- multiple host/server support
+- support for non-github service
